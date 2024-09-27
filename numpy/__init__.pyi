@@ -791,9 +791,9 @@ _ByteOrderChar: TypeAlias = L[
 # can be anything, is case-insensitive, and only the first character matters
 _ByteOrder: TypeAlias = L[
     "S",                # swap the current order (default)
-    "<", "L", "little", # little-endian
+    "<", "L", "little",  # little-endian
     ">", "B", "big",    # big endian
-    "=", "N", "native", # native order
+    "=", "N", "native",  # native order
     "|", "I",           # ignore
 ]
 _DTypeKind: TypeAlias = L[
@@ -1774,7 +1774,6 @@ _ShapeType_co = TypeVar("_ShapeType_co", covariant=True, bound=_Shape)
 _ShapeType2 = TypeVar("_ShapeType2", bound=_Shape)
 _Shape2DType_co = TypeVar("_Shape2DType_co", covariant=True, bound=_Shape2D)
 _NumberType = TypeVar("_NumberType", bound=number[Any])
-
 
 if sys.version_info >= (3, 12):
     from collections.abc import Buffer as _SupportsBuffer
@@ -3785,7 +3784,6 @@ class float64(floating[_64Bit], float):  # type: ignore[misc]
     def __divmod__(self, other: _Float64_co, /) -> _2Tuple[float64]: ...  # type: ignore[override]
     def __rdivmod__(self, other: _Float64_co, /) -> _2Tuple[float64]: ...  # type: ignore[override]
 
-
 half: TypeAlias = floating[_NBitHalf]
 single: TypeAlias = floating[_NBitSingle]
 double: TypeAlias = floating[_NBitDouble]
@@ -3918,7 +3916,6 @@ class complex128(complexfloating[_64Bit, _64Bit], complex):
     def __pow__(self, other: complexfloating[_NBit1, _NBit2], /) -> complexfloating[_NBit1 | _64Bit, _NBit2 | _64Bit]: ...
     def __rpow__(self, other: _Complex128_co, /) -> complex128: ...
 
-
 csingle: TypeAlias = complexfloating[_NBitSingle, _NBitSingle]
 cdouble: TypeAlias = complexfloating[_NBitDouble, _NBitDouble]
 clongdouble: TypeAlias = complexfloating[_NBitLongDouble, _NBitLongDouble]
@@ -3930,7 +3927,7 @@ class flexible(generic): ...  # type: ignore
 # or a structure
 class void(flexible):
     @overload
-    def __init__(self, value: _IntLike_co | bytes, /, dtype : None = ...) -> None: ...
+    def __init__(self, value: _IntLike_co | bytes, /, dtype: None = ...) -> None: ...
     @overload
     def __init__(self, value: Any, /, dtype: _DTypeLikeVoid) -> None: ...
     @property
@@ -4263,7 +4260,6 @@ class busdaycalendar:
     @property
     def holidays(self) -> NDArray[datetime64]: ...
 
-
 _FloatType_co = TypeVar('_FloatType_co', bound=floating[Any], covariant=True, default=floating[NBitBase])
 
 class finfo(Generic[_FloatType_co]):
@@ -4576,7 +4572,6 @@ class poly1d:
         k: None | _ArrayLikeComplex_co | _ArrayLikeObject_co = ...,
     ) -> poly1d: ...
 
-
 class matrix(ndarray[_Shape2DType_co, _DType_co]):
     __array_priority__: ClassVar[float]
     def __new__(
@@ -4713,7 +4708,7 @@ class matrix(ndarray[_Shape2DType_co, _DType_co]):
     @property
     def T(self) -> matrix[_Shape2D, _DType_co]: ...
     @property
-    def I(self) -> matrix[_Shape2D, Any]: ...
+    def I(self) -> matrix[_Shape2D, Any]: ...  # noqa: E743
     @property
     def A(self) -> ndarray[_Shape2DType_co, _DType_co]: ...
     @property
@@ -4725,7 +4720,6 @@ class matrix(ndarray[_Shape2DType_co, _DType_co]):
     def getA(self) -> ndarray[_Shape2DType_co, _DType_co]: ...
     def getA1(self) -> ndarray[_Shape, _DType_co]: ...
     def getH(self) -> matrix[_Shape2D, _DType_co]: ...
-
 
 class _SupportsDLPack(Protocol[_T_contra]):
     def __dlpack__(self, *, stream: None | _T_contra = ...) -> _PyCapsule: ...

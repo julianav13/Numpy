@@ -43,7 +43,7 @@ jobs:
     - name: Install linter requirements
       run:
         python -m pip install -r requirements/linter_requirements.txt
-    - name: Run linter on PR diff
+    - name: Run linter on PR
       run:
         python tools/linter.py --branch origin/${{ github.base_ref }}
 

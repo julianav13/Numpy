@@ -167,7 +167,6 @@ def vander(
     increasing: bool = ...,
 ) -> NDArray[object_]: ...
 
-
 _Int_co: TypeAlias = np.integer[Any] | np.bool
 _Float_co: TypeAlias = np.floating[Any] | _Int_co
 _Number_co: TypeAlias = np.number[Any] | np.bool
@@ -327,7 +326,7 @@ def histogram2d(
 ) -> tuple[
     NDArray[float64],
     NDArray[_SCT_number_co | complex128 | float64],
-    NDArray[_SCT_number_co | complex128 | float64] ,
+    NDArray[_SCT_number_co | complex128 | float64],
 ]: ...
 
 @overload

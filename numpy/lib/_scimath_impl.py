@@ -392,7 +392,7 @@ def logn(n, x):
     """
     x = _fix_real_lt_zero(x)
     n = _fix_real_lt_zero(n)
-    return nx.log(x)/nx.log(n)
+    return nx.log(x) / nx.log(n)
 
 
 @array_function_dispatch(_unary_dispatcher)

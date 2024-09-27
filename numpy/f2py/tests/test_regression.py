@@ -33,8 +33,10 @@ class TestNegativeBounds(util.F2PyTest):
         xvec = np.arange(12)
         xlow = -6
         xhigh = 4
+
         # Calculate the upper bound,
         # Keeping the 1 index in mind
+
         def ubound(xl, xh):
             return xh - xl + 1
         rval = self.module.foo(is_=xlow, ie_=xhigh,
@@ -77,7 +79,7 @@ class TestIncludeFiles(util.F2PyTest):
     def test_gh25344(self):
         exp = 7.0
         res = self.module.add(3.0, 4.0)
-        assert  exp == res
+        assert exp == res
 
 class TestF77Comments(util.F2PyTest):
     # Check that comments are stripped from F77 continuation lines
@@ -87,15 +89,15 @@ class TestF77Comments(util.F2PyTest):
     def test_gh26148(self):
         x1 = np.array(3, dtype=np.int32)
         x2 = np.array(5, dtype=np.int32)
-        res=self.module.testsub(x1, x2)
-        assert(res[0] == 8)
-        assert(res[1] == 15)
+        res = self.module.testsub(x1, x2)
+        assert res[0] == 8
+        assert res[1] == 15
 
     @pytest.mark.slow
     def test_gh26466(self):
         # Check that comments after PARAMETER directions are stripped
-        expected = np.arange(1, 11, dtype=np.float32)*2
-        res=self.module.testsub2()
+        expected = np.arange(1, 11, dtype=np.float32) * 2
+        res = self.module.testsub2()
         npt.assert_allclose(expected, res)
 
 class TestF90Contiuation(util.F2PyTest):
@@ -106,9 +108,9 @@ class TestF90Contiuation(util.F2PyTest):
     def test_gh26148b(self):
         x1 = np.array(3, dtype=np.int32)
         x2 = np.array(5, dtype=np.int32)
-        res=self.module.testsub(x1, x2)
-        assert(res[0] == 8)
-        assert(res[1] == 15)
+        res = self.module.testsub(x1, x2)
+        assert res[0] == 8
+        assert res[1] == 15
 
 @pytest.mark.slow
 def test_gh26623():
