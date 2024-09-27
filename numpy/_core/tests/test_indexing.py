@@ -258,9 +258,9 @@ class TestIndexing:
         a = np.array([[1, 2, 3],
                       [4, 5, 6],
                       [7, 8, 9]])
-        b = np.array([[ True, False,  True],
-                      [False,  True, False],
-                      [ True, False,  True]])
+        b = np.array([[ True, False, True],
+                      [False, True, False],
+                      [ True, False, True]])
         assert_equal(a[b], [1, 3, 5, 7, 9])
         assert_equal(a[b[1]], [[4, 5, 6]])
         assert_equal(a[b[0]], a[b[2]])
@@ -412,7 +412,7 @@ class TestIndexing:
     def test_subclass_writeable(self):
         d = np.rec.array([('NGC1001', 11), ('NGC1002', 1.), ('NGC1003', 1.)],
                          dtype=[('target', 'S20'), ('V_mag', '>f4')])
-        ind = np.array([False,  True,  True], dtype=bool)
+        ind = np.array([False, True, True], dtype=bool)
         assert_(d[ind].flags.writeable)
         ind = np.array([0, 1])
         assert_(d[ind].flags.writeable)
