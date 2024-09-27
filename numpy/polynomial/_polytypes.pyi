@@ -111,7 +111,12 @@ _ArrayLikeCoef_co: TypeAlias = (
     | _ArrayLikeCoefObject_co
 )
 
-_Name_co = TypeVar("_Name_co", bound=LiteralString, covariant=True, default=LiteralString)
+_Name_co = TypeVar(
+    "_Name_co",
+    bound=LiteralString,
+    covariant=True,
+    default=LiteralString
+)
 
 class _Named(Protocol[_Name_co]):
     @property

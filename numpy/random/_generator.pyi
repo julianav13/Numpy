@@ -200,7 +200,10 @@ class Generator:
     ) -> float: ...  # type: ignore[misc]
     @overload
     def beta(
-        self, a: _ArrayLikeFloat_co, b: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
+        self,
+        a: _ArrayLikeFloat_co,
+        b: _ArrayLikeFloat_co,
+        size: None | _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
     def exponential(self, scale: _FloatLike_co = ..., size: None = ...) -> float: ...  # type: ignore[misc]
@@ -250,7 +253,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[uint8] | type[uint8] | _UInt8Codes | _SupportsDType[dtype[uint8]] = ...,
+        dtype: dtype[uint8] | type[uint8] | _UInt8Codes | _SupportsDType[dtype[uint8]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> uint8: ...
     @overload
@@ -259,7 +262,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[uint16] | type[uint16] | _UInt16Codes | _SupportsDType[dtype[uint16]] = ...,
+        dtype: dtype[uint16] | type[uint16] | _UInt16Codes | _SupportsDType[dtype[uint16]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> uint16: ...
     @overload
@@ -268,7 +271,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[uint32] | type[uint32] | _UInt32Codes | _SupportsDType[dtype[uint32]] = ...,
+        dtype: dtype[uint32] | type[uint32] | _UInt32Codes | _SupportsDType[dtype[uint32]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> uint32: ...
     @overload
@@ -277,7 +280,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[uint] | type[uint] | _UIntCodes | _SupportsDType[dtype[uint]] = ...,
+        dtype: dtype[uint] | type[uint] | _UIntCodes | _SupportsDType[dtype[uint]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> uint: ...
     @overload
@@ -286,7 +289,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[uint64] | type[uint64] | _UInt64Codes | _SupportsDType[dtype[uint64]] = ...,
+        dtype: dtype[uint64] | type[uint64] | _UInt64Codes | _SupportsDType[dtype[uint64]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> uint64: ...
     @overload
@@ -295,7 +298,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[int8] | type[int8] | _Int8Codes | _SupportsDType[dtype[int8]] = ...,
+        dtype: dtype[int8] | type[int8] | _Int8Codes | _SupportsDType[dtype[int8]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> int8: ...
     @overload
@@ -304,7 +307,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[int16] | type[int16] | _Int16Codes | _SupportsDType[dtype[int16]] = ...,
+        dtype: dtype[int16] | type[int16] | _Int16Codes | _SupportsDType[dtype[int16]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> int16: ...
     @overload
@@ -313,7 +316,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[int32] | type[int32] | _Int32Codes | _SupportsDType[dtype[int32]] = ...,
+        dtype: dtype[int32] | type[int32] | _Int32Codes | _SupportsDType[dtype[int32]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> int32: ...
     @overload
@@ -322,7 +325,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[int_] | type[int] | type[int_] | _IntCodes | _SupportsDType[dtype[int_]] = ...,
+        dtype: dtype[int_] | type[int] | type[int_] | _IntCodes | _SupportsDType[dtype[int_]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> int_: ...
     @overload
@@ -331,7 +334,7 @@ class Generator:
         low: int,
         high: None | int = ...,
         size: None = ...,
-        dtype: dtype[int64] | type[int64] | _Int64Codes | _SupportsDType[dtype[int64]] = ...,
+        dtype: dtype[int64] | type[int64] | _Int64Codes | _SupportsDType[dtype[int64]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> int64: ...
     @overload
@@ -358,7 +361,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[int8] | type[int8] | _Int8Codes | _SupportsDType[dtype[int8]] = ...,
+        dtype: dtype[int8] | type[int8] | _Int8Codes | _SupportsDType[dtype[int8]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[int8]: ...
     @overload
@@ -367,7 +370,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[int16] | type[int16] | _Int16Codes | _SupportsDType[dtype[int16]] = ...,
+        dtype: dtype[int16] | type[int16] | _Int16Codes | _SupportsDType[dtype[int16]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[int16]: ...
     @overload
@@ -376,7 +379,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[int32] | type[int32] | _Int32Codes | _SupportsDType[dtype[int32]] = ...,
+        dtype: dtype[int32] | type[int32] | _Int32Codes | _SupportsDType[dtype[int32]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[int32]: ...
     @overload
@@ -385,7 +388,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: None | dtype[int64] | type[int64] | _Int64Codes | _SupportsDType[dtype[int64]] = ...,
+        dtype: None | dtype[int64] | type[int64] | _Int64Codes | _SupportsDType[dtype[int64]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[int64]: ...
     @overload
@@ -394,7 +397,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[uint8] | type[uint8] | _UInt8Codes | _SupportsDType[dtype[uint8]] = ...,
+        dtype: dtype[uint8] | type[uint8] | _UInt8Codes | _SupportsDType[dtype[uint8]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[uint8]: ...
     @overload
@@ -403,7 +406,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[uint16] | type[uint16] | _UInt16Codes | _SupportsDType[dtype[uint16]] = ...,
+        dtype: dtype[uint16] | type[uint16] | _UInt16Codes | _SupportsDType[dtype[uint16]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[uint16]: ...
     @overload
@@ -412,7 +415,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[uint32] | type[uint32] | _UInt32Codes | _SupportsDType[dtype[uint32]] = ...,
+        dtype: dtype[uint32] | type[uint32] | _UInt32Codes | _SupportsDType[dtype[uint32]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[uint32]: ...
     @overload
@@ -421,7 +424,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[uint64] | type[uint64] | _UInt64Codes | _SupportsDType[dtype[uint64]] = ...,
+        dtype: dtype[uint64] | type[uint64] | _UInt64Codes | _SupportsDType[dtype[uint64]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[uint64]: ...
     @overload
@@ -430,7 +433,7 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[int_] | type[int] | type[int_] | _IntCodes | _SupportsDType[dtype[int_]] = ...,
+        dtype: dtype[int_] | type[int] | type[int_] | _IntCodes | _SupportsDType[dtype[int_]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[int_]: ...
     @overload
@@ -439,10 +442,11 @@ class Generator:
         low: _ArrayLikeInt_co,
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
-        dtype: dtype[uint] | type[uint] | _UIntCodes | _SupportsDType[dtype[uint]] = ...,
+        dtype: dtype[uint] | type[uint] | _UIntCodes | _SupportsDType[dtype[uint]] = ...,  # noqa: E501
         endpoint: bool = ...,
     ) -> NDArray[uint]: ...
-    # TODO: Use a TypeVar _T here to get away from Any output?  Should be int->NDArray[int64], ArrayLike[_T] -> _T | NDArray[Any]
+    # TODO: Use a TypeVar _T here to get away from Any output?
+    #       Should be int->NDArray[int64], ArrayLike[_T] -> _T | NDArray[Any]
     @overload
     def choice(
         self,
@@ -549,7 +553,9 @@ class Generator:
         out: None | NDArray[float64] = ...,
     ) -> NDArray[float64]: ...
     @overload
-    def gamma(self, shape: _FloatLike_co, scale: _FloatLike_co = ..., size: None = ...) -> float: ...  # type: ignore[misc]
+    def gamma(
+        self, shape: _FloatLike_co, scale: _FloatLike_co = ..., size: None = ...
+    ) -> float: ...  # type: ignore[misc]
     @overload
     def gamma(
         self,
@@ -558,13 +564,23 @@ class Generator:
         size: None | _ShapeLike = ...,
     ) -> NDArray[float64]: ...
     @overload
-    def f(self, dfnum: _FloatLike_co, dfden: _FloatLike_co, size: None = ...) -> float: ...  # type: ignore[misc]
+    def f(
+        self, dfnum: _FloatLike_co, dfden: _FloatLike_co, size: None = ...
+    ) -> float: ...  # type: ignore[misc]
     @overload
     def f(
-        self, dfnum: _ArrayLikeFloat_co, dfden: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
+        self,
+        dfnum: _ArrayLikeFloat_co,
+        dfden: _ArrayLikeFloat_co,
+        size: None | _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
-    def noncentral_f(self, dfnum: _FloatLike_co, dfden: _FloatLike_co, nonc: _FloatLike_co, size: None = ...) -> float: ...  # type: ignore[misc]
+    def noncentral_f(
+        self,
+        dfnum: _FloatLike_co,
+        dfden: _FloatLike_co,
+        nonc: _FloatLike_co, size: None = ...
+    ) -> float: ...  # type: ignore[misc]
     @overload
     def noncentral_f(
         self,
@@ -580,10 +596,15 @@ class Generator:
         self, df: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
-    def noncentral_chisquare(self, df: _FloatLike_co, nonc: _FloatLike_co, size: None = ...) -> float: ...  # type: ignore[misc]
+    def noncentral_chisquare(
+        self, df: _FloatLike_co, nonc: _FloatLike_co, size: None = ...
+    ) -> float: ...  # type: ignore[misc]
     @overload
     def noncentral_chisquare(
-        self, df: _ArrayLikeFloat_co, nonc: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
+        self,
+        df: _ArrayLikeFloat_co,
+        nonc: _ArrayLikeFloat_co,
+        size: None | _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
     def standard_t(self, df: _FloatLike_co, size: None = ...) -> float: ...  # type: ignore[misc]
@@ -596,10 +617,15 @@ class Generator:
         self, df: _ArrayLikeFloat_co, size: _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
-    def vonmises(self, mu: _FloatLike_co, kappa: _FloatLike_co, size: None = ...) -> float: ...  # type: ignore[misc]
+    def vonmises(
+        self, mu: _FloatLike_co, kappa: _FloatLike_co, size: None = ...
+    ) -> float: ...  # type: ignore[misc]
     @overload
     def vonmises(
-        self, mu: _ArrayLikeFloat_co, kappa: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
+        self,
+        mu: _ArrayLikeFloat_co,
+        kappa: _ArrayLikeFloat_co,
+        size: None | _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
     def pareto(self, a: _FloatLike_co, size: None = ...) -> float: ...  # type: ignore[misc]
@@ -686,10 +712,15 @@ class Generator:
         self, scale: _ArrayLikeFloat_co = ..., size: None | _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
-    def wald(self, mean: _FloatLike_co, scale: _FloatLike_co, size: None = ...) -> float: ...  # type: ignore[misc]
+    def wald(
+        self, mean: _FloatLike_co, scale: _FloatLike_co, size: None = ...
+    ) -> float: ...  # type: ignore[misc]
     @overload
     def wald(
-        self, mean: _ArrayLikeFloat_co, scale: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
+        self,
+        mean: _ArrayLikeFloat_co,
+        scale: _ArrayLikeFloat_co,
+        size: None | _ShapeLike = ...
     ) -> NDArray[float64]: ...
     @overload
     def triangular(
@@ -714,10 +745,15 @@ class Generator:
         self, n: _ArrayLikeInt_co, p: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
     ) -> NDArray[int64]: ...
     @overload
-    def negative_binomial(self, n: _FloatLike_co, p: _FloatLike_co, size: None = ...) -> int: ...  # type: ignore[misc]
+    def negative_binomial(
+        self, n: _FloatLike_co, p: _FloatLike_co, size: None = ...
+    ) -> int: ...  # type: ignore[misc]
     @overload
     def negative_binomial(
-        self, n: _ArrayLikeFloat_co, p: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
+        self,
+        n: _ArrayLikeFloat_co,
+        p: _ArrayLikeFloat_co,
+        size: None | _ShapeLike = ...
     ) -> NDArray[int64]: ...
     @overload
     def poisson(self, lam: _FloatLike_co = ..., size: None = ...) -> int: ...  # type: ignore[misc]
@@ -738,7 +774,9 @@ class Generator:
         self, p: _ArrayLikeFloat_co, size: None | _ShapeLike = ...
     ) -> NDArray[int64]: ...
     @overload
-    def hypergeometric(self, ngood: int, nbad: int, nsample: int, size: None = ...) -> int: ...  # type: ignore[misc]
+    def hypergeometric(
+        self, ngood: int, nbad: int, nsample: int, size: None = ...
+    ) -> int: ...  # type: ignore[misc]
     @overload
     def hypergeometric(
         self,
