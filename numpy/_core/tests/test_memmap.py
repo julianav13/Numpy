@@ -200,7 +200,7 @@ class TestMemmap:
         assert_(fp.offset == offset)
 
     def test_no_shape(self):
-        self.tmpfp.write(b'a'*16)
+        self.tmpfp.write(b'a' * 16)
         mm = memmap(self.tmpfp, dtype='float64')
         assert_equal(mm.shape, (2,))
 

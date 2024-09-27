@@ -26,7 +26,7 @@ class TestEinsum:
         assert_raises(TypeError, einsum_fn, 0, 0, optimize=do_opt)
 
         # issue 4528 revealed a segfault with this call
-        assert_raises(TypeError, einsum_fn, *(None,)*63, optimize=do_opt)
+        assert_raises(TypeError, einsum_fn, *(None,) * 63, optimize=do_opt)
 
         # number of operands must match count in subscripts string
         assert_raises(ValueError, einsum_fn, "", 0, 0, optimize=do_opt)
@@ -320,7 +320,7 @@ class TestEinsum:
             assert_equal(np.einsum(a, [0], [], optimize=do_opt), b)
 
         for n in range(1, 17):
-            a = np.arange(2*3*n, dtype=dtype).reshape(2, 3, n)
+            a = np.arange(2 * 3 * n, dtype=dtype).reshape(2, 3, n)
             b = np.sum(a, axis=-1)
             if hasattr(b, 'astype'):
                 b = b.astype(dtype)
@@ -329,7 +329,7 @@ class TestEinsum:
 
         # sum(a, axis=0)
         for n in range(1, 17):
-            a = np.arange(2*n, dtype=dtype).reshape(2, n)
+            a = np.arange(2 * n, dtype=dtype).reshape(2, n)
             b = np.sum(a, axis=0)
             if hasattr(b, 'astype'):
                 b = b.astype(dtype)
@@ -337,7 +337,7 @@ class TestEinsum:
             assert_equal(np.einsum(a, [0, Ellipsis], [Ellipsis], optimize=do_opt), b)
 
         for n in range(1, 17):
-            a = np.arange(2*3*n, dtype=dtype).reshape(2, 3, n)
+            a = np.arange(2 * 3 * n, dtype=dtype).reshape(2, 3, n)
             b = np.sum(a, axis=0)
             if hasattr(b, 'astype'):
                 b = b.astype(dtype)
@@ -346,7 +346,7 @@ class TestEinsum:
 
         # trace(a)
         for n in range(1, 17):
-            a = np.arange(n*n, dtype=dtype).reshape(n, n)
+            a = np.arange(n * n, dtype=dtype).reshape(n, n)
             b = np.trace(a)
             if hasattr(b, 'astype'):
                 b = b.astype(dtype)
@@ -386,8 +386,8 @@ class TestEinsum:
 
         # outer(a,b)
         for n in range(1, 17):
-            a = np.arange(3, dtype=dtype)+1
-            b = np.arange(n, dtype=dtype)+1
+            a = np.arange(3, dtype=dtype) + 1
+            b = np.arange(n, dtype=dtype) + 1
             assert_equal(np.einsum("i,j", a, b, optimize=do_opt),
                          np.outer(a, b))
             assert_equal(np.einsum(a, [0], b, [1], optimize=do_opt),
@@ -399,7 +399,7 @@ class TestEinsum:
 
             # matvec(a,b) / a.dot(b) where a is matrix, b is vector
             for n in range(1, 17):
-                a = np.arange(4*n, dtype=dtype).reshape(4, n)
+                a = np.arange(4 * n, dtype=dtype).reshape(4, n)
                 b = np.arange(n, dtype=dtype)
                 assert_equal(np.einsum("ij, j", a, b, optimize=do_opt),
                              np.dot(a, b))
@@ -420,7 +420,7 @@ class TestEinsum:
                                     b.astype('f8')).astype(dtype))
 
             for n in range(1, 17):
-                a = np.arange(4*n, dtype=dtype).reshape(4, n)
+                a = np.arange(4 * n, dtype=dtype).reshape(4, n)
                 b = np.arange(n, dtype=dtype)
                 assert_equal(np.einsum("ji,j", a.T, b.T, optimize=do_opt),
                              np.dot(b.T, a.T))
@@ -443,16 +443,16 @@ class TestEinsum:
             # matmat(a,b) / a.dot(b) where a is matrix, b is matrix
             for n in range(1, 17):
                 if n < 8 or dtype != 'f2':
-                    a = np.arange(4*n, dtype=dtype).reshape(4, n)
-                    b = np.arange(n*6, dtype=dtype).reshape(n, 6)
+                    a = np.arange(4 * n, dtype=dtype).reshape(4, n)
+                    b = np.arange(n * 6, dtype=dtype).reshape(n, 6)
                     assert_equal(np.einsum("ij,jk", a, b, optimize=do_opt),
                                  np.dot(a, b))
                     assert_equal(np.einsum(a, [0, 1], b, [1, 2], optimize=do_opt),
                                  np.dot(a, b))
 
             for n in range(1, 17):
-                a = np.arange(4*n, dtype=dtype).reshape(4, n)
-                b = np.arange(n*6, dtype=dtype).reshape(n, 6)
+                a = np.arange(4 * n, dtype=dtype).reshape(4, n)
+                b = np.arange(n * 6, dtype=dtype).reshape(n, 6)
                 c = np.arange(24, dtype=dtype).reshape(4, 6)
                 np.einsum("ij,jk", a, b, out=c, dtype='f8', casting='unsafe',
                           optimize=do_opt)
@@ -525,10 +525,10 @@ class TestEinsum:
                      np.logical_and(np.logical_and(a != 0, b != 0), c != 0))
 
         a = np.arange(9, dtype=dtype)
-        assert_equal(np.einsum(",i->", 3, a), 3*np.sum(a))
-        assert_equal(np.einsum(3, [], a, [0], []), 3*np.sum(a))
-        assert_equal(np.einsum("i,->", a, 3), 3*np.sum(a))
-        assert_equal(np.einsum(a, [0], 3, [], []), 3*np.sum(a))
+        assert_equal(np.einsum(",i->", 3, a), 3 * np.sum(a))
+        assert_equal(np.einsum(3, [], a, [0], []), 3 * np.sum(a))
+        assert_equal(np.einsum("i,->", a, 3), 3 * np.sum(a))
+        assert_equal(np.einsum(a, [0], 3, [], []), 3 * np.sum(a))
 
         # Various stride0, contiguous, and SSE aligned variants
         for n in range(1, 25):
@@ -537,21 +537,21 @@ class TestEinsum:
                 assert_equal(np.einsum("...,...", a, a, optimize=do_opt),
                              np.multiply(a, a))
                 assert_equal(np.einsum("i,i", a, a, optimize=do_opt), np.dot(a, a))
-                assert_equal(np.einsum("i,->i", a, 2, optimize=do_opt), 2*a)
-                assert_equal(np.einsum(",i->i", 2, a, optimize=do_opt), 2*a)
-                assert_equal(np.einsum("i,->", a, 2, optimize=do_opt), 2*np.sum(a))
-                assert_equal(np.einsum(",i->", 2, a, optimize=do_opt), 2*np.sum(a))
+                assert_equal(np.einsum("i,->i", a, 2, optimize=do_opt), 2 * a)
+                assert_equal(np.einsum(",i->i", 2, a, optimize=do_opt), 2 * a)
+                assert_equal(np.einsum("i,->", a, 2, optimize=do_opt), 2 * np.sum(a))
+                assert_equal(np.einsum(",i->", 2, a, optimize=do_opt), 2 * np.sum(a))
 
                 assert_equal(np.einsum("...,...", a[1:], a[:-1], optimize=do_opt),
                              np.multiply(a[1:], a[:-1]))
                 assert_equal(np.einsum("i,i", a[1:], a[:-1], optimize=do_opt),
                              np.dot(a[1:], a[:-1]))
-                assert_equal(np.einsum("i,->i", a[1:], 2, optimize=do_opt), 2*a[1:])
-                assert_equal(np.einsum(",i->i", 2, a[1:], optimize=do_opt), 2*a[1:])
+                assert_equal(np.einsum("i,->i", a[1:], 2, optimize=do_opt), 2 * a[1:])
+                assert_equal(np.einsum(",i->i", 2, a[1:], optimize=do_opt), 2 * a[1:])
                 assert_equal(np.einsum("i,->", a[1:], 2, optimize=do_opt),
-                             2*np.sum(a[1:]))
+                             2 * np.sum(a[1:]))
                 assert_equal(np.einsum(",i->", 2, a[1:], optimize=do_opt),
-                             2*np.sum(a[1:]))
+                             2 * np.sum(a[1:]))
 
         # An object array, summed as the data type
         a = np.arange(9, dtype=object)

@@ -145,12 +145,12 @@ def test_set_replace_na(i):
     s_long = "-=+" * 100
     strings = [s_medium, s_empty, s_short, s_medium, s_long]
     a = np.array(strings, StringDType(na_object=np.nan))
-    for s in [a[i], s_medium+s_short, s_short, s_empty, s_long]:
+    for s in [a[i], s_medium + s_short, s_short, s_empty, s_long]:
         a[i] = np.nan
         assert np.isnan(a[i])
         a[i] = s
         assert a[i] == s
-        assert_array_equal(a, strings[:i] + [s] + strings[i+1:])
+        assert_array_equal(a, strings[:i] + [s] + strings[i + 1:])
 
 
 def test_null_roundtripping():
@@ -497,13 +497,13 @@ def test_fancy_indexing(string_list):
 
     # see gh-27003 and gh-27053
     for ind in [[True, True], [0, 1], ...]:
-        for lop in [['a'*16, 'b'*16], ['', '']]:
+        for lop in [['a' * 16, 'b' * 16], ['', '']]:
             a = np.array(lop, dtype="T")
-            rop = ['d'*16, 'e'*16]
+            rop = ['d' * 16, 'e' * 16]
             for b in [rop, np.array(rop, dtype="T")]:
                 a[ind] = b
                 assert_array_equal(a, b)
-                assert a[0] == 'd'*16
+                assert a[0] == 'd' * 16
 
 
 def test_creation_functions():
@@ -524,10 +524,10 @@ def test_concatenate(string_list):
 def test_resize_method(string_list):
     sarr = np.array(string_list, dtype="T")
     if IS_PYPY:
-        sarr.resize(len(string_list)+3, refcheck=False)
+        sarr.resize(len(string_list) + 3, refcheck=False)
     else:
-        sarr.resize(len(string_list)+3)
-    assert_array_equal(sarr, np.array(string_list + ['']*3,  dtype="T"))
+        sarr.resize(len(string_list) + 3)
+    assert_array_equal(sarr, np.array(string_list + [''] * 3,  dtype="T"))
 
 
 def test_create_with_copy_none(string_list):
@@ -1081,7 +1081,7 @@ def test_nat_casts():
         for arr in [dt_array, td_array]:
             assert_array_equal(
                 arr.astype(dtype),
-                np.array([output_object]*arr.size, dtype=dtype))
+                np.array([output_object] * arr.size, dtype=dtype))
 
 
 def test_nat_conversion():
