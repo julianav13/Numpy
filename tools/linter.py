@@ -53,7 +53,6 @@ class DiffLinter:
         )
         return res.returncode, res.stdout
 
-
     def run_lint(self, uncommitted):
         retcode, errors = self.run_ruff()
 

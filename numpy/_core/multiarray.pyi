@@ -255,7 +255,6 @@ class _ConstructorEmpty(Protocol):
         **kwargs: Unpack[_KwargsEmpty],
     ) -> NDArray[Any]: ...
 
-
 __all__: list[str]
 
 ALLOW_THREADS: Final[int]  # 0 or 1 (system-specific)
