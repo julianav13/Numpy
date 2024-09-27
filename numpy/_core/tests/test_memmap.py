@@ -207,12 +207,12 @@ class TestMemmap:
     def test_empty_array(self):
         # gh-12653
         with pytest.raises(ValueError, match='empty file'):
-            memmap(self.tmpfp, shape=(0,4), mode='w+')
+            memmap(self.tmpfp, shape=(0, 4), mode='w+')
 
         self.tmpfp.write(b'\0')
 
         # ok now the file is not empty
-        memmap(self.tmpfp, shape=(0,4), mode='w+')
+        memmap(self.tmpfp, shape=(0, 4), mode='w+')
 
     def test_shape_type(self):
         memmap(self.tmpfp, shape=3, mode='w+')

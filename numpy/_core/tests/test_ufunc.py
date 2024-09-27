@@ -971,8 +971,8 @@ class TestUfunc:
     def test_incontiguous_array(self):
         msg = "incontiguous memory layout of array"
         x = np.arange(64).reshape((2, 2, 2, 2, 2, 2))
-        a = x[:, 0,:, 0,:, 0]
-        b = x[:, 1,:, 1,:, 1]
+        a = x[:, 0, :, 0, :, 0]
+        b = x[:, 1, :, 1, :, 1]
         a[0, 0, 0] = -1
         msg2 = "make sure it references to the original array"
         assert_equal(x[0, 0, 0, 0, 0, 0], -1, err_msg=msg2)
@@ -1397,7 +1397,7 @@ class TestUfunc:
                             assert_array_almost_equal(
                                 umt.matrix_multiply(a1, a2),
                                 np.sum(a2[..., np.newaxis].swapaxes(-3, -1) *
-                                       a1[..., np.newaxis,:], axis=-1),
+                                       a1[..., np.newaxis, :], axis=-1),
                                 err_msg=msg + ' %s %s' % (str(a1.shape),
                                                           str(a2.shape)))
 
@@ -2336,7 +2336,7 @@ class TestUfunc:
 
     def test_reduce_arguments(self):
         f = np.add.reduce
-        d = np.ones((5,2), dtype=int)
+        d = np.ones((5, 2), dtype=int)
         o = np.ones((2,), dtype=d.dtype)
         r = o * 5
         assert_equal(f(d), r)
@@ -2405,7 +2405,7 @@ class TestUfunc:
             def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
                 return getattr(ufunc, method)(*(input.view(np.ndarray)
                                               for input in inputs), **kwargs)
-        a = np.arange(12.).reshape(4,3)
+        a = np.arange(12.).reshape(4, 3)
         ra = a.view(dtype=('f8,f8,f8')).squeeze()
         mra = ra.view(MyA)
 
@@ -2570,9 +2570,9 @@ class TestUfunc:
         # gh-8036
 
         x = np.arange(7 * 13 * 8, dtype=np.int16).reshape(7, 13, 8)
-        x = x[4:6,1:11:6,1:5].transpose(1, 2, 0)
+        x = x[4:6, 1:11:6, 1:5].transpose(1, 2, 0)
         y_base = np.arange(4 * 4, dtype=np.int16).reshape(4, 4)
-        y = y_base[::2,:]
+        y = y_base[::2, :]
 
         y_base_copy = y_base.copy()
 
@@ -2581,8 +2581,8 @@ class TestUfunc:
 
         # The results should match, and y_base shouldn't get clobbered
         assert_equal(r0, r1)
-        assert_equal(y_base[1,:], y_base_copy[1,:])
-        assert_equal(y_base[3,:], y_base_copy[3,:])
+        assert_equal(y_base[1, :], y_base_copy[1, :])
+        assert_equal(y_base[3, :], y_base_copy[3, :])
 
     @pytest.mark.parametrize("with_cast", [True, False])
     def test_reduceat_and_accumulate_out_shape_mismatch(self, with_cast):
@@ -2770,7 +2770,7 @@ def test_ufunc_noncontiguous(ufunc):
             args_o.append(np.empty(6, dtype=dtype)["t"])
 
         for a in args_c + args_n + args_o:
-            a.flat = range(1,7)
+            a.flat = range(1, 7)
 
         with warnings.catch_warnings(record=True):
             warnings.filterwarnings("always")
