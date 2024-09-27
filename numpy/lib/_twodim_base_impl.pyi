@@ -327,7 +327,7 @@ def histogram2d(
 ) -> tuple[
     NDArray[float64],
     NDArray[_SCT_number_co | complex128 | float64],
-    NDArray[_SCT_number_co | complex128 | float64] ,
+    NDArray[_SCT_number_co | complex128 | float64],
 ]: ...
 
 @overload
