@@ -2142,6 +2142,165 @@ string_inputs_promoter(
     return 0;
 }
 
+static NPY_CASTING
+slice_resolve_descriptors(
+        PyArrayMethodObject *self,
+        PyArray_DTypeMeta *const NPY_UNUSED(dtypes[5]),
+        PyArray_Descr *const given_descrs[5],
+        PyArray_Descr *loop_descrs[5],
+        npy_intp *NPY_UNUSED(view_offset))
+{
+    if (given_descrs[4]) {
+        PyErr_Format(PyExc_TypeError, "The StringDType '%s' ufunc does not "
+                     "currently support the 'out' keyword", self->name);
+        return _NPY_ERROR_OCCURRED_IN_CAST;
+    }
+
+    for (int i = 0; i < 4; i++) {
+        Py_INCREF(given_descrs[i]);
+        loop_descrs[i] = given_descrs[i];
+    }
+
+    PyArray_StringDTypeObject *in_descr = (PyArray_StringDTypeObject *)loop_descrs[0];
+    int out_coerce = in_descr->coerce;
+    PyObject *out_na_object = in_descr->na_object;
+    loop_descrs[4] = (PyArray_Descr *)new_stringdtype_instance(out_na_object, out_coerce);
+    if (loop_descrs[4] == NULL) {
+        return _NPY_ERROR_OCCURRED_IN_CAST;
+    }
+
+    return NPY_NO_CASTING;
+}
+
+static int
+slice_strided_loop(PyArrayMethod_Context *context,
+                   char *const data[], npy_intp const dimensions[],
+                   npy_intp const strides[], NpyAuxData *NPY_UNUSED(auxdata))
+{
+    PyArray_StringDTypeObject *idescr = (PyArray_StringDTypeObject *)context->descriptors[0];
+
+    char *iptr = data[0];
+    char *start_ptr = data[1];
+    char *stop_ptr = data[2];
+    char *step_ptr = data[3];
+    char *optr = data[4];
+
+    npy_intp N = dimensions[0];
+
+    npy_string_allocator *allocators[5] = {};
+    NpyString_acquire_allocators(5, context->descriptors, allocators);
+    npy_string_allocator *iallocator = allocators[0];
+    npy_string_allocator *oallocator = allocators[4];
+
+    while (N--) {
+        // get the slice
+        npy_intp start = *(npy_intp*)start_ptr;
+        npy_intp stop = *(npy_intp*)stop_ptr;
+        npy_intp step = *(npy_intp*)step_ptr;
+
+        npy_static_string is = {0, NULL};
+        const npy_packed_static_string *ips = (npy_packed_static_string *)iptr;
+        npy_static_string os = {0, NULL};
+        npy_packed_static_string *ops = (npy_packed_static_string *)optr;
+        int is_isnull = NpyString_load(iallocator, ips, &is);
+        if (is_isnull == -1) {
+            npy_gil_error(PyExc_MemoryError,
+                          "Failed to load string in slice");
+            goto fail;
+        }
+        else if (is_isnull) {
+            npy_gil_error(PyExc_TypeError,
+                        "Cannot slice null string");
+            goto fail;
+        }
+
+        // adjust slice to string length in codepoints
+        // and handle negative indices
+        Buffer<ENCODING::UTF8> inbuf((char *)is.buf, is.size);
+        size_t num_codepoints = inbuf.num_codepoints();
+        npy_intp slice_length = PySlice_AdjustIndices(num_codepoints, &start, &stop, step);
+
+        // first pass: compute outsize
+        size_t outsize = 0;
+        inbuf += start;
+        for (npy_intp i = 0; i < slice_length; i++) {
+            outsize += num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
+
+            // Move in inbuf by step.
+            // TODO: operator+=() cannot handle negative indices for UTF8
+            if (step > 0) {
+                inbuf += step;
+            }
+            else {
+                inbuf -= -step;
+            }
+        }
+
+        char *buf = NULL;
+        if (context->descriptors[0] == context->descriptors[4]) {
+            // in-place
+            buf = (char *)PyMem_RawMalloc(outsize);
+            if (buf == NULL) {
+                npy_gil_error(PyExc_MemoryError, "Failed to allocate string in slice");
+                goto fail;
+            }
+        }
+        else {
+            if (load_new_string(ops, &os, outsize, oallocator, "slice") < 0) {
+                goto fail;
+            }
+            /* explicitly discard const; initializing new buffer */
+            buf = (char *)os.buf;
+        }
+
+        // second pass: iterate over slice and copy each character of the string
+        inbuf = Buffer<ENCODING::UTF8>((char *)is.buf, is.size); // reset inbuf
+        Buffer<ENCODING::UTF8> outbuf(buf, outsize);
+        inbuf += start;
+        for (npy_intp i = 0; i < slice_length; i++) {
+            size_t num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
+
+            inbuf.buffer_memcpy(outbuf, num_bytes);
+
+            // Move in inbuf by step.
+            // TODO: operator+=() cannot handle negative indices for UTF8
+            if (step > 0) {
+                inbuf += step;
+            }
+            else {
+                inbuf -= -step;
+            }
+
+            // Move in outbuf by the number of chars or bytes written
+            outbuf.advance_chars_or_bytes(num_bytes);
+        }
+
+        // in-place operations need to clean up temp buffer
+        if (context->descriptors[0] == context->descriptors[4]) {
+            if (NpyString_pack(oallocator, ops, buf, outsize) < 0) {
+                npy_gil_error(PyExc_MemoryError, "Failed to pack string in slice");
+                goto fail;
+            }
+
+            PyMem_RawFree(buf);
+        }
+
+        // move to next step
+        iptr += strides[0];
+        start_ptr += strides[1];
+        stop_ptr += strides[2];
+        step_ptr += strides[3];
+        optr += strides[4];
+    }
+
+    NpyString_release_allocators(5, allocators);
+    return 0;
+
+fail:
+    NpyString_release_allocators(5, allocators);
+    return -1;
+}
+
 static int
 string_object_bool_output_promoter(
         PyObject *ufunc, PyArray_DTypeMeta *const op_dtypes[],
@@ -2919,6 +3078,20 @@ init_stringdtype_ufuncs(PyObject *umath)
                        (NPY_ARRAYMETHOD_FLAGS) 0, &partition_startpositions[i]) < 0) {
             return -1;
         }
+    }
+
+    PyArray_DTypeMeta *slice_dtypes[] = {
+        &PyArray_StringDType,
+        &PyArray_IntpDType,
+        &PyArray_IntpDType,
+        &PyArray_IntpDType,
+        &PyArray_StringDType,
+    };
+
+    if (init_ufunc(umath, "_slice", slice_dtypes, slice_resolve_descriptors,
+                   slice_strided_loop, 4, 1, NPY_NO_CASTING,
+                   (NPY_ARRAYMETHOD_FLAGS) 0, NULL) < 0) {
+        return -1;
     }
 
     return 0;
