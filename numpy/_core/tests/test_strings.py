@@ -865,7 +865,7 @@ class TestMethods:
         (1,),
         (3,),
         (5,),
-        (6,), # test index past the end
+        (6,),  # test index past the end
         (-1,),
         (-3,),
         ([3, 4],),
@@ -1149,7 +1149,8 @@ class TestMethodsWithUnicode:
         ([0, 10], [-1, 0], [2, -1]),
     ])
     def test_slice(self, args, dt):
-        buf = np.array(["Приве́т नमस्ते שָׁלוֹם", "😀😃😄😁😆😅🤣😂🙂🙃"], dtype=dt)
+        buf = np.array(["Приве́т नमस्ते שָׁלוֹם", "😀😃😄😁😆😅🤣😂🙂🙃"],
+                       dtype=dt)
         act = np.strings.slice(buf, *args)
         bcast_args = tuple(np.broadcast_to(arg, buf.shape) for arg in args)
         res = np.array([s[slice(*arg)]

@@ -2177,8 +2177,6 @@ slice_strided_loop(PyArrayMethod_Context *context,
                    char *const data[], npy_intp const dimensions[],
                    npy_intp const strides[], NpyAuxData *NPY_UNUSED(auxdata))
 {
-    PyArray_StringDTypeObject *idescr = (PyArray_StringDTypeObject *)context->descriptors[0];
-
     char *iptr = data[0];
     char *start_ptr = data[1];
     char *stop_ptr = data[2];
