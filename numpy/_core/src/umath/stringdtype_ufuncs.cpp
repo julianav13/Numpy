@@ -2143,16 +2143,17 @@ string_inputs_promoter(
 }
 
 static NPY_CASTING
-slice_resolve_descriptors(
-        PyArrayMethodObject *self,
-        PyArray_DTypeMeta *const NPY_UNUSED(dtypes[5]),
-        PyArray_Descr *const given_descrs[5],
-        PyArray_Descr *loop_descrs[5],
-        npy_intp *NPY_UNUSED(view_offset))
+slice_resolve_descriptors(PyArrayMethodObject *self,
+                          PyArray_DTypeMeta *const NPY_UNUSED(dtypes[5]),
+                          PyArray_Descr *const given_descrs[5],
+                          PyArray_Descr *loop_descrs[5],
+                          npy_intp *NPY_UNUSED(view_offset))
 {
     if (given_descrs[4]) {
-        PyErr_Format(PyExc_TypeError, "The StringDType '%s' ufunc does not "
-                     "currently support the 'out' keyword", self->name);
+        PyErr_Format(PyExc_TypeError,
+                     "The StringDType '%s' ufunc does not "
+                     "currently support the 'out' keyword",
+                     self->name);
         return _NPY_ERROR_OCCURRED_IN_CAST;
     }
 
@@ -2161,10 +2162,12 @@ slice_resolve_descriptors(
         loop_descrs[i] = given_descrs[i];
     }
 
-    PyArray_StringDTypeObject *in_descr = (PyArray_StringDTypeObject *)loop_descrs[0];
+    PyArray_StringDTypeObject *in_descr =
+            (PyArray_StringDTypeObject *)loop_descrs[0];
     int out_coerce = in_descr->coerce;
     PyObject *out_na_object = in_descr->na_object;
-    loop_descrs[4] = (PyArray_Descr *)new_stringdtype_instance(out_na_object, out_coerce);
+    loop_descrs[4] = (PyArray_Descr *)new_stringdtype_instance(out_na_object,
+                                                               out_coerce);
     if (loop_descrs[4] == NULL) {
         return _NPY_ERROR_OCCURRED_IN_CAST;
     }
@@ -2173,9 +2176,9 @@ slice_resolve_descriptors(
 }
 
 static int
-slice_strided_loop(PyArrayMethod_Context *context,
-                   char *const data[], npy_intp const dimensions[],
-                   npy_intp const strides[], NpyAuxData *NPY_UNUSED(auxdata))
+slice_strided_loop(PyArrayMethod_Context *context, char *const data[],
+                   npy_intp const dimensions[], npy_intp const strides[],
+                   NpyAuxData *NPY_UNUSED(auxdata))
 {
     char *iptr = data[0];
     char *start_ptr = data[1];
@@ -2192,9 +2195,9 @@ slice_strided_loop(PyArrayMethod_Context *context,
 
     while (N--) {
         // get the slice
-        npy_intp start = *(npy_intp*)start_ptr;
-        npy_intp stop = *(npy_intp*)stop_ptr;
-        npy_intp step = *(npy_intp*)step_ptr;
+        npy_intp start = *(npy_intp *)start_ptr;
+        npy_intp stop = *(npy_intp *)stop_ptr;
+        npy_intp step = *(npy_intp *)step_ptr;
 
         npy_static_string is = {0, NULL};
         const npy_packed_static_string *ips = (npy_packed_static_string *)iptr;
@@ -2202,13 +2205,11 @@ slice_strided_loop(PyArrayMethod_Context *context,
         npy_packed_static_string *ops = (npy_packed_static_string *)optr;
         int is_isnull = NpyString_load(iallocator, ips, &is);
         if (is_isnull == -1) {
-            npy_gil_error(PyExc_MemoryError,
-                          "Failed to load string in slice");
+            npy_gil_error(PyExc_MemoryError, "Failed to load string in slice");
             goto fail;
         }
         else if (is_isnull) {
-            npy_gil_error(PyExc_TypeError,
-                        "Cannot slice null string");
+            npy_gil_error(PyExc_TypeError, "Cannot slice null string");
             goto fail;
         }
 
@@ -2216,7 +2217,8 @@ slice_strided_loop(PyArrayMethod_Context *context,
         // and handle negative indices
         Buffer<ENCODING::UTF8> inbuf((char *)is.buf, is.size);
         size_t num_codepoints = inbuf.num_codepoints();
-        npy_intp slice_length = PySlice_AdjustIndices(num_codepoints, &start, &stop, step);
+        npy_intp slice_length =
+                PySlice_AdjustIndices(num_codepoints, &start, &stop, step);
 
         // move to start position in inbuf
         inbuf += start;
@@ -2226,8 +2228,9 @@ slice_strided_loop(PyArrayMethod_Context *context,
         if (step > 0) {
             const char *inbuf_ptr = inbuf.buf;
             npy_intp i_idx = 0, o_idx = 0;
-            while(o_idx < slice_length) {
-                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf_ptr);
+            while (o_idx < slice_length) {
+                int num_bytes = num_bytes_for_utf8_character(
+                        (const unsigned char *)inbuf_ptr);
 
                 if (i_idx % step == 0) {
                     outsize += num_bytes;
@@ -2243,21 +2246,25 @@ slice_strided_loop(PyArrayMethod_Context *context,
                 const char *inbuf_ptr = inbuf.buf;
 
                 // get number of bytes for current character
-                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf_ptr);
+                int num_bytes = num_bytes_for_utf8_character(
+                        (const unsigned char *)inbuf_ptr);
 
                 npy_intp i_idx = 0, o_idx = 0;
-                while(o_idx < slice_length) {
+                while (o_idx < slice_length) {
                     if (i_idx % (-step) == 0) {
                         outsize += num_bytes;
                         o_idx++;
                     }
 
-                    // break out of loop if we would read past the beginning of the buffer
+                    // break out of loop if we would read past the beginning of
+                    // the buffer
                     if (inbuf_ptr <= is.buf) {
                         break;
                     }
 
-                    char *previous_char_ptr = (char *)find_previous_utf8_character((const unsigned char *)inbuf_ptr, 1);
+                    char *previous_char_ptr =
+                            (char *)find_previous_utf8_character(
+                                    (const unsigned char *)inbuf_ptr, 1);
                     num_bytes = inbuf_ptr - previous_char_ptr;
                     inbuf_ptr = previous_char_ptr;
                     i_idx++;
@@ -2270,7 +2277,8 @@ slice_strided_loop(PyArrayMethod_Context *context,
             // in-place
             buf = (char *)PyMem_RawMalloc(outsize);
             if (buf == NULL) {
-                npy_gil_error(PyExc_MemoryError, "Failed to allocate string in slice");
+                npy_gil_error(PyExc_MemoryError,
+                              "Failed to allocate string in slice");
                 goto fail;
             }
         }
@@ -2282,46 +2290,59 @@ slice_strided_loop(PyArrayMethod_Context *context,
             buf = (char *)os.buf;
         }
 
-        // second pass: iterate over slice and copy each character of the string
+        // second pass: iterate over slice and copy each character of the
+        // string
         Buffer<ENCODING::UTF8> outbuf(buf, outsize);
-        if (step > 0) {
-            npy_intp i_idx = 0, o_idx = 0;
-            while(o_idx < slice_length) {
-                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
-
-                if (i_idx % step == 0) {
-                    inbuf.buffer_memcpy(outbuf, num_bytes);
-                    outbuf.advance_chars_or_bytes(num_bytes);
-                    o_idx++;
-                }
-
-                inbuf.buf += num_bytes;
-                i_idx++;
-            }
+        if (step == 1) {
+            // easy case, use memcpy
+            inbuf.buffer_memcpy(outbuf, outsize);
         }
         else {
-            if (slice_length > 0) {
-                // get number of bytes for current character
-                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
-
+            // general case, iterate over each characterof the string
+            if (step > 0) {
                 npy_intp i_idx = 0, o_idx = 0;
-                while(o_idx < slice_length) {
-                    if (i_idx % (-step) == 0) {
+                while (o_idx < slice_length) {
+                    int num_bytes = num_bytes_for_utf8_character(
+                            (const unsigned char *)inbuf.buf);
+
+                    if (i_idx % step == 0) {
                         inbuf.buffer_memcpy(outbuf, num_bytes);
                         outbuf.advance_chars_or_bytes(num_bytes);
                         o_idx++;
                     }
 
-                    // break out of loop if we would read past the beginning of the buffer
-                    if (inbuf.buf <= is.buf) {
-                        break;
-                    }
-
-                    // find previous character and update num_bytes
-                    char *previous_char_ptr = (char *)find_previous_utf8_character((const unsigned char *)inbuf.buf, 1);
-                    num_bytes = inbuf.buf - previous_char_ptr;
-                    inbuf.buf = previous_char_ptr;
+                    inbuf.buf += num_bytes;
                     i_idx++;
+                }
+            }
+            else {
+                if (slice_length > 0) {
+                    // get number of bytes for current character
+                    int num_bytes = num_bytes_for_utf8_character(
+                            (const unsigned char *)inbuf.buf);
+
+                    npy_intp i_idx = 0, o_idx = 0;
+                    while (o_idx < slice_length) {
+                        if (i_idx % (-step) == 0) {
+                            inbuf.buffer_memcpy(outbuf, num_bytes);
+                            outbuf.advance_chars_or_bytes(num_bytes);
+                            o_idx++;
+                        }
+
+                        // break out of loop if we would read past the
+                        // beginning of the buffer
+                        if (inbuf.buf <= is.buf) {
+                            break;
+                        }
+
+                        // find previous character and update num_bytes
+                        char *previous_char_ptr =
+                                (char *)find_previous_utf8_character(
+                                        (const unsigned char *)inbuf.buf, 1);
+                        num_bytes = inbuf.buf - previous_char_ptr;
+                        inbuf.buf = previous_char_ptr;
+                        i_idx++;
+                    }
                 }
             }
         }
@@ -2329,7 +2350,8 @@ slice_strided_loop(PyArrayMethod_Context *context,
         // in-place operations need to clean up temp buffer
         if (context->descriptors[0] == context->descriptors[4]) {
             if (NpyString_pack(oallocator, ops, buf, outsize) < 0) {
-                npy_gil_error(PyExc_MemoryError, "Failed to pack string in slice");
+                npy_gil_error(PyExc_MemoryError,
+                              "Failed to pack string in slice");
                 goto fail;
             }
 
