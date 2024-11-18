@@ -2252,6 +2252,11 @@ slice_strided_loop(PyArrayMethod_Context *context,
                         o_idx++;
                     }
 
+                    // break out of loop if we would read past the beginning of the buffer
+                    if (inbuf.buf <= is.buf) {
+                        break;
+                    }
+
                     // find previous character and update num_bytes
                     char *previous_char_ptr = (char *)find_previous_utf8_character((const unsigned char *)inbuf_ptr, 1);
                     num_bytes = inbuf_ptr - previous_char_ptr;
@@ -2306,6 +2311,11 @@ slice_strided_loop(PyArrayMethod_Context *context,
                         inbuf.buffer_memcpy(outbuf, num_bytes);
                         outbuf.advance_chars_or_bytes(num_bytes);
                         o_idx++;
+                    }
+
+                    // break out of loop if we would read past the beginning of the buffer
+                    if (inbuf.buf <= is.buf) {
+                        break;
                     }
 
                     // find previous character and update num_bytes
