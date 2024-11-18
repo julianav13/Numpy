@@ -2218,19 +2218,46 @@ slice_strided_loop(PyArrayMethod_Context *context,
         size_t num_codepoints = inbuf.num_codepoints();
         npy_intp slice_length = PySlice_AdjustIndices(num_codepoints, &start, &stop, step);
 
+        // move to start position in inbuf
+        inbuf += start;
+
         // first pass: compute outsize
         size_t outsize = 0;
-        inbuf += start;
-        for (npy_intp i = 0; i < slice_length; i++) {
-            outsize += num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
+        if (step > 0) {
+            const char *inbuf_ptr = inbuf.buf;
+            npy_intp i_idx = 0, o_idx = 0;
+            while(o_idx < slice_length) {
+                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf_ptr);
 
-            // Move in inbuf by step.
-            // TODO: operator+=() cannot handle negative indices for UTF8
-            if (step > 0) {
-                inbuf += step;
+                if (i_idx % step == 0) {
+                    outsize += num_bytes;
+                    o_idx++;
+                }
+
+                inbuf_ptr += num_bytes;
+                i_idx++;
             }
-            else {
-                inbuf -= -step;
+        }
+        else {
+            if (slice_length > 0) {
+                const char *inbuf_ptr = inbuf.buf;
+
+                // get number of bytes for current character
+                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf_ptr);
+
+                npy_intp i_idx = 0, o_idx = 0;
+                while(o_idx < slice_length) {
+                    if (i_idx % (-step) == 0) {
+                        outsize += num_bytes;
+                        o_idx++;
+                    }
+
+                    // find previous character and update num_bytes
+                    char *previous_char_ptr = (char *)find_previous_utf8_character((const unsigned char *)inbuf_ptr, 1);
+                    num_bytes = inbuf_ptr - previous_char_ptr;
+                    inbuf_ptr = previous_char_ptr;
+                    i_idx++;
+                }
             }
         }
 
@@ -2252,25 +2279,42 @@ slice_strided_loop(PyArrayMethod_Context *context,
         }
 
         // second pass: iterate over slice and copy each character of the string
-        inbuf = Buffer<ENCODING::UTF8>((char *)is.buf, is.size); // reset inbuf
         Buffer<ENCODING::UTF8> outbuf(buf, outsize);
-        inbuf += start;
-        for (npy_intp i = 0; i < slice_length; i++) {
-            size_t num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
+        if (step > 0) {
+            npy_intp i_idx = 0, o_idx = 0;
+            while(o_idx < slice_length) {
+                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
 
-            inbuf.buffer_memcpy(outbuf, num_bytes);
+                if (i_idx % step == 0) {
+                    inbuf.buffer_memcpy(outbuf, num_bytes);
+                    outbuf.advance_chars_or_bytes(num_bytes);
+                    o_idx++;
+                }
 
-            // Move in inbuf by step.
-            // TODO: operator+=() cannot handle negative indices for UTF8
-            if (step > 0) {
-                inbuf += step;
+                inbuf.buf += num_bytes;
+                i_idx++;
             }
-            else {
-                inbuf -= -step;
-            }
+        }
+        else {
+            if (slice_length > 0) {
+                // get number of bytes for current character
+                int num_bytes = num_bytes_for_utf8_character((const unsigned char *)inbuf.buf);
 
-            // Move in outbuf by the number of chars or bytes written
-            outbuf.advance_chars_or_bytes(num_bytes);
+                npy_intp i_idx = 0, o_idx = 0;
+                while(o_idx < slice_length) {
+                    if (i_idx % (-step) == 0) {
+                        inbuf.buffer_memcpy(outbuf, num_bytes);
+                        outbuf.advance_chars_or_bytes(num_bytes);
+                        o_idx++;
+                    }
+
+                    // find previous character and update num_bytes
+                    char *previous_char_ptr = (char *)find_previous_utf8_character((const unsigned char *)inbuf.buf, 1);
+                    num_bytes = inbuf.buf - previous_char_ptr;
+                    inbuf.buf = previous_char_ptr;
+                    i_idx++;
+                }
+            }
         }
 
         // in-place operations need to clean up temp buffer

@@ -1643,9 +1643,8 @@ def slice(a, start=None, stop=None, step=None, /):
 
     >>> b = np.array(['hello world', 'γεια σου κόσμε', '你好世界', '👋 🌍️'],
     ...              dtype=np.dtypes.StringDType())
-    >>> np.strings.slice(b, -1)
-    array(['hello worl', 'γεια σου κόσμ', '你好世', '👋 🌍'],
-          dtype=StringDType())
+    >>> np.strings.slice(b, -2)
+    array(['hello wor', 'γεια σου κόσ', '你好', '👋 '], dtype=StringDType())
 
     >>> np.strings.slice(b, [3, 0, 2, 1], -1)
     array(['lo worl', 'γεια σου κόσμ', '世', ' 🌍'], dtype=StringDType())
