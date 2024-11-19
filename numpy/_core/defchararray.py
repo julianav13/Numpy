@@ -398,10 +398,6 @@ def rpartition(a, sep):
     return np.stack(strings_rpartition(a, sep), axis=-1)
 
 
-# explicitly define slice function since it conflicts with the slice builtin
-slice = strings_slice
-
-
 @set_module("numpy.char")
 class chararray(ndarray):
     """
@@ -1217,10 +1213,6 @@ class chararray(ndarray):
         Slice the strings in `self` by slices specified by `start`, `stop`, `step`.
         Like in the regular Python `slice` object, if only `start` is specified
         it is interpreted as the `stop`.
-
-        See Also
-        --------
-        char.slice
 
         """
         return asarray(strings_slice(self, start, stop, step))
