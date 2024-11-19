@@ -1214,6 +1214,10 @@ class chararray(ndarray):
         Like in the regular Python `slice` object, if only `start` is specified
         it is interpreted as the `stop`.
 
+        See Also
+        --------
+        char.slice
+
         """
         return asarray(strings_slice(self, start, stop, step))
 
