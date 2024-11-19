@@ -5337,7 +5337,7 @@ add_newdoc('numpy._core.umath', '_rpartition',
 add_newdoc('numpy._core.umath', '_slice',
     """
     Slice the strings in `a` by slices specified by `start`, `stop`, `step`.
-    Like in the regular Python `builtins.slice` object, if only `start` is
+    Like in the regular Python `slice` object, if only `start` is
     specified then it is interpreted as the `stop`.
 
     Parameters
