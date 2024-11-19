@@ -1603,21 +1603,21 @@ def translate(a, table, deletechars=None):
 def slice(a, start=None, stop=None, step=None, /):
     """
     Slice the strings in `a` by slices specified by `start`, `stop`, `step`.
-    Like in the regular Python `slice` object, if only `start` is specified
-    it is interpreted as the `stop`.
+    Like in the regular Python `builtins.slice` object, if only `start` is
+    specified then it is interpreted as the `stop`.
 
     Parameters
     ----------
     a : array-like, with ``StringDType``, ``bytes_``, or ``str_`` dtype
 
     start : the start of the slice, can be None, an integer or
-       an array of integers which can be broadcasted to`a`'s shape
+            an array of integers which can be broadcasted to`a`'s shape
 
     stop : the end point of the slice, can be None, and integer or
-       an array of integers which can be broadcasted to`a`'s shape
+           an array of integers which can be broadcasted to`a`'s shape
 
     step : the step for the slice, can be None, an integer or
-       an array of integers which can be broadcasted to`a`'s shape
+           an array of integers which can be broadcasted to`a`'s shape
 
     Returns
     -------
