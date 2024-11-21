@@ -1641,16 +1641,16 @@ def slice(a, start=None, stop=None, step=None, /):
 
     Negative slices have the same meaning as in regular Python:
 
-    >>> b = np.array(['hello world', 'γεια σου κόσμε', '你好世界', '👋 🌍️'],
+    >>> b = np.array(['hello world', 'γεια σου κόσμε', '你好世界', '👋 🌍'],
     ...              dtype=np.dtypes.StringDType())
     >>> np.strings.slice(b, -2)
-    array(['hello wor', 'γεια σου κόσ', '你好', '👋 '], dtype=StringDType())
+    array(['hello wor', 'γεια σου κόσ', '你好', '👋'], dtype=StringDType())
 
-    >>> np.strings.slice(b, [3, 0, 2, 1], -1)
-    array(['lo worl', 'γεια σου κόσμ', '世', ' 🌍'], dtype=StringDType())
+    >>> np.strings.slice(b, [3, -10, 2, -3], [-1, -2, -1, 3])
+    array(['lo worl', ' σου κόσ', '世', '👋 🌍'], dtype=StringDType())
 
     >>> np.strings.slice(b, None, None, -1)
-    array(['dlrow olleh', 'εμσόκ υοσ αιεγ', '界世好你', '️🌍 👋'],
+    array(['dlrow olleh', 'εμσόκ υοσ αιεγ', '界世好你', '🌍 👋'],
           dtype=StringDType())
 
     """
