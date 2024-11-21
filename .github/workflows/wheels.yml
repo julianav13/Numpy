@@ -174,7 +174,7 @@ jobs:
           name: ${{ matrix.python }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}
           path: ./wheelhouse/*.whl
 
-      - uses: mamba-org/setup-micromamba@617811f69075e3fd3ae68ca64220ad065877f246
+      - uses: mamba-org/setup-micromamba@ab6bf8bf7403e8023a094abeec19d6753bdc143e
         with:
           # for installation of anaconda-client, required for upload to
           # anaconda.org
@@ -255,7 +255,7 @@ jobs:
           name: sdist
           path: ./dist/*
 
-      - uses: conda-incubator/setup-miniconda@a4260408e20b96e80095f42ff7f1a15b27dd94ca # v3.0.4
+      - uses: conda-incubator/setup-miniconda@d2e6a045a86077fb6cad6f5adf368e9076ddaa8d # v3.1.0
         with:
           # for installation of anaconda-client, required for upload to
           # anaconda.org

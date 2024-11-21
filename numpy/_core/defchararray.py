@@ -263,6 +263,7 @@ def less(x1, x2):
     return compare_chararrays(x1, x2, '<', True)
 
 
+@set_module("numpy.char")
 def multiply(a, i):
     """
     Return (a * i), that is string multiple concatenation,
@@ -314,6 +315,7 @@ def multiply(a, i):
         raise ValueError("Can only multiply by integers")
 
 
+@set_module("numpy.char")
 def partition(a, sep):
     """
     Partition each element in `a` around `sep`.
@@ -355,6 +357,7 @@ def partition(a, sep):
     return np.stack(strings_partition(a, sep), axis=-1)
 
 
+@set_module("numpy.char")
 def rpartition(a, sep):
     """
     Partition (split) each element around the right-most separator.
