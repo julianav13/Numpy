@@ -5366,6 +5366,6 @@ add_newdoc('numpy._core.umath', '_slice',
 
     >>> np.strings.slice(b, None, None, -1)
     array(['dlrow olleh', 'εμσόκ υοσ αιεγ', '界世好你', '🌍 👋'],
-        dtype=StringDType())
+          dtype=StringDType())
 
     """)

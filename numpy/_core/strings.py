@@ -1640,6 +1640,7 @@ def translate(a, table, deletechars=None):
             [table] + _clean_args(deletechars)
         )
 
+@set_module("numpy.strings")
 def slice(a, start=None, stop=None, step=None, /):
     """
     Slice the strings in `a` by slices specified by `start`, `stop`, `step`.
