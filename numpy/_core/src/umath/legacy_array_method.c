@@ -127,7 +127,7 @@ wrapped_legacy_resolve_descriptors(PyArrayMethodObject *NPY_UNUSED(self),
  * Much the same as the default type resolver, but tries a bit harder to
  * preserve metadata.
  */
-static NPY_CASTING
+NPY_NO_EXPORT NPY_CASTING
 simple_legacy_resolve_descriptors(
         PyArrayMethodObject *method,
         PyArray_DTypeMeta *const *dtypes,
@@ -270,7 +270,7 @@ copy_cached_initial(
  * This path is not publicly available.  That could be added, and for a
  * custom initial getter it should be static/compile time data anyway.
  */
-static int
+NPY_NO_EXPORT int
 get_initial_from_ufunc(
         PyArrayMethod_Context *context, npy_bool reduction_is_empty,
         void *initial)
