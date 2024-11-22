@@ -1322,6 +1322,11 @@ defdict = {
           docstrings.get('numpy._core.umath._rpartition'),
           None,
           ),
+'_slice':
+    Ufunc(4, 1, None,
+          docstrings.get('numpy._core.umath._slice'),
+          None,
+          ),
 }
 
 def indent(st, spaces):
